@@ -51,18 +51,6 @@ class FeedbackResource extends Resource
           ->stars(5)
           ->default(0)
           ->required(),
-
-        Forms\Components\TextInput::make('mentor_name')
-          ->columnSpan('full')
-          ->prefixIcon('heroicon-o-user')
-          ->default(fn() => Auth::user()->participant->mentor->user->name)
-          ->disabled(),
-
-        Forms\Components\TextInput::make('participant_name')
-          ->columnSpan('full')
-          ->prefixIcon('heroicon-o-user')
-          ->default(fn() => Auth::user()->name)
-          ->disabled(),
       ]);
   }
 

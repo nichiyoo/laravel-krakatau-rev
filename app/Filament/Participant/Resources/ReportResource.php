@@ -9,7 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Joaopaulolndev\FilamentPdfViewer\Infolists as CustomInfolist;
 use Filament\Infolists;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +30,12 @@ class ReportResource extends Resource
     return __('Learning Management');
   }
 
+  public static function getEloquentQuery(): EloquentBuilder
+  {
+    $user = Auth::user();
+    return parent::getEloquentQuery()->where('participant_id', $user->participant->id);
+  }
+
   public static function form(Form $form): Form
   {
     return $form
@@ -44,12 +50,6 @@ class ReportResource extends Resource
           ->translateLabel()
           ->required()
           ->rows(5),
-
-        Forms\Components\TextInput::make('participant_name')
-          ->columnSpan('full')
-          ->prefixIcon('heroicon-o-user')
-          ->default(fn() => Auth::user()->name)
-          ->disabled(),
 
         Forms\Components\FileUpload::make('file')
           ->acceptedFileTypes(['application/pdf'])
